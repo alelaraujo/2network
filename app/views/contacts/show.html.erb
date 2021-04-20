@@ -1,0 +1,63 @@
+<div class="container">
+  <div class="row justify-content-md-center mt-3">
+    <div class="col-md-9">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><%= link_to contacts_path, class: "text-reset" do %>Contacts<% end %></li>
+          <li class="breadcrumb-item active" aria-current="page">Events</li>
+        </ol>
+      </nav>
+      <div class="card w-100">
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <h5 class="card-title">
+              <% if @contact.photo.attached? %>
+                  <%= cl_image_tag @contact.photo.key, class: "rounded-circle mr-1" , height: 50, width: 50, crop: :fill %>
+                <% else %>
+                  <%= image_tag "user_icon.png", class: "rounded-circle mr-1" , height: 50, width: 50, crop: :fill %>
+                <% end %>
+              <%= @contact.first_name %> <%= @contact.last_name %></h5>
+            <div class="dropdown">
+                <a class="btn btn-secondary btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Actions
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <%= link_to "Add event", new_contact_event_path(@contact), class: "dropdown-item" %>
+                  <%= link_to "Edit contact", edit_contact_path(@contact), class: "dropdown-item"%>
+                  <%= link_to 'Delete contact', contact_path(@contact), method: :delete, data: { confirm: 'Are you sure?' }, class: "dropdown-item" %>
+                </div>
+              </div>
+          </div>
+            <p class="card-text"><%= @contact.bio %></p>
+        </div>
+      </div>
+
+      <% @events.each do |event| %>
+        <div class="card my-2">
+          <div class="card-header">
+            <div class="d-flex justify-content-between">
+              <span><i class="fas <%= event.type.icon %> mr-1"></i><%= event.type.name %></span>
+              <div class="dropdown">
+                <a class="btn btn-secondary btn-sm dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Actions
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <%= link_to "Edit", edit_contact_event_path(event.contact_id, event.id), class: "dropdown-item" %> 
+                  <%= link_to "Delete", contact_event_path(event.contact_id, event.id), method: :delete, data: { confirm: 'Are you sure?' }, class: "dropdown-item" %>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-text"><%= event.note %></p>
+            <small><%= event.created_at.strftime('Created on %m/%d/%y') %></small>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+
+
+ 
